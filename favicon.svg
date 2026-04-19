@@ -1,7 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#000000"/>
-  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle"
-        font-size="32" fill="#00ff9f" font-family="monospace">
+  <rect width="64" height="64" fill="#050816"/>
+
+  <text x="50%" y="55%"
+        dominant-baseline="middle"
+        text-anchor="middle"
+        font-size="30"
+        font-family="monospace">
+
+    <animate attributeName="fill"
+             values="#22d3ee;#8b5cf6;#00ff9f;#ff003c;#22d3ee"
+             dur="2s"
+             repeatCount="indefinite"/>
+
     >_
   </text>
 </svg>
