@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>charkazly.az</title>
+  <meta name="description" content="Absolutely nothing suspicious is happening here." />
+  <style>
+    :root {
+      --bg1: #050816;
+      --bg2: #0b1026;
+      --line: rgba(255,255,255,.08);
+      --text: #eef2ff;
+      --muted: rgba(238,242,255,.7);
+      --accent: #8b5cf6;
+      --accent2: #22d3ee;
+      --card: rgba(255,255,255,.06);
+      --shadow: 0 20px 80px rgba(0,0,0,.45);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(139,92,246,.18), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(34,211,238,.12), transparent 25%),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,.06), transparent 25%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow: hidden;
+    }
+
+    .noise, .grid, .scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .grid {
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+    }
+
+    .scanlines {
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.025),
+        rgba(255,255,255,.025) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      opacity: .18;
+      animation: flicker 6s linear infinite;
+    }
+
+    .noise {
+      opacity: .06;
+      background-image:
+        radial-gradient(rgba(255,255,255,.7) 0.5px, transparent 0.6px);
+      background-size: 8px 8px;
+      mix-blend-mode: soft-light;
+    }
+
+    .wrap {
+      position: relative;
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      position: relative;
+      width: min(720px, 100%);
+      padding: 32px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 18px rgba(34,211,238,.7);
+      animation: pulse 1.4s infinite;
+    }
+
+    h1 {
+      margin: 22px 0 10px;
+      font-size: clamp(40px, 9vw, 86px);
+      line-height: .95;
+      letter-spacing: -.04em;
+      text-wrap: balance;
+      text-shadow: 0 0 30px rgba(139,92,246,.28);
+    }
+
+    .glitch {
+      position: relative;
+      display: inline-block;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      clip-path: inset(0 0 0 0);
+    }
+
+    .glitch::before {
+      transform: translate(-2px, 0);
+      color: rgba(34,211,238,.8);
+      animation: glitchA 2.8s infinite linear alternate-reverse;
+    }
+
+    .glitch::after {
+      transform: translate(2px, 0);
+      color: rgba(236,72,153,.7);
+      animation: glitchB 2.1s infinite linear alternate-reverse;
+    }
+
+    p {
+      margin: 0 auto;
+      max-width: 560px;
+      font-size: clamp(16px, 2.6vw, 20px);
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .loading {
+      margin: 28px auto 12px;
+      width: min(420px, 100%);
+      height: 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .loading > span {
+      display: block;
+      height: 100%;
+      width: 73%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent));
+      background-size: 200% 100%;
+      animation: move 2.8s ease-in-out infinite;
+      box-shadow: 0 0 24px rgba(139,92,246,.45);
+    }
+
+    .sub {
+      margin-top: 10px;
+      font-size: 13px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(238,242,255,.56);
+    }
+
+    .tiny {
+      margin-top: 26px;
+      font-size: 12px;
+      color: rgba(238,242,255,.44);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .corner {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 24px;
+      filter: blur(.2px);
+    }
+
+    .c1 { left: -16px; top: -16px; }
+    .c2 { right: -16px; bottom: -16px; }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: .75; }
+    }
+
+    @keyframes move {
+      0% { width: 8%; background-position: 0% 50%; }
+      50% { width: 86%; background-position: 100% 50%; }
+      100% { width: 73%; background-position: 0% 50%; }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: .12; }
+      50% { opacity: .18; }
+    }
+
+    @keyframes glitchA {
+      0% { transform: translate(-2px, 0); }
+      20% { transform: translate(-4px, 1px); }
+      40% { transform: translate(-1px, -1px); }
+      60% { transform: translate(-3px, 0); }
+      80% { transform: translate(-1px, 1px); }
+      100% { transform: translate(-2px, 0); }
+    }
+
+    @keyframes glitchB {
+      0% { transform: translate(2px, 0); }
+      20% { transform: translate(4px, -1px); }
+      40% { transform: translate(1px, 1px); }
+      60% { transform: translate(3px, 0); }
+      80% { transform: translate(1px, -1px); }
+      100% { transform: translate(2px, 0); }
+    }
+
+    @media (max-width: 560px) {
+      .card { padding: 24px 18px; border-radius: 22px; }
+      .corner { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="grid"></div>
+  <div class="scanlines"></div>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="corner c1"></div>
+      <div class="corner c2"></div>
+
+      <div class="badge">
+        <span class="dot"></span>
+        system initialization in progress
+      </div>
+
+      <h1>
+        <span class="glitch" data-text="CHARKAZLY.AZ">CHARKAZLY.AZ</span>
+      </h1>
+
+      <p>
+        Loading something unnecessarily dramatic.<br>
+        Please remain calm and avoid refreshing reality.
+      </p>
+
+      <div class="loading" aria-label="loading bar">
+        <span></span>
+      </div>
+
+      <div class="sub">coming soon • maybe too soon</div>
+      <div class="tiny">nothing suspicious is happening here</div>
+    </section>
+  </main>
+</body>
+</html>
